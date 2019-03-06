@@ -1,0 +1,94 @@
+---
+title: "R Notebook"
+output:
+  html_document:
+    df_print: paged
+---
+# A
+load auto.data dan hilangkan missing values menggunakan fungsi na.omit()
+```{r}
+auto = read.table("../dataset/Auto.data")
+auto = na.omit(auto)
+```
+```{r}
+dim(auto)
+```
+```{r}
+fix(auto)
+```
+ternyata headernya masih belum diperbaiki. kita ingin pada row pertama menjadi header.
+```{r}
+auto = read.table("../dataset/Auto.data", header=T, na.strings="?")
+auto = na.omit(auto)
+```
+```{r}
+dim(auto)
+```
+```{r}
+summary(auto)
+```
+qualitative prediktor ialah origin dan name. sisanya quantitative
+
+# B
+fungsi range() untuk mengetahui range nilai dari prediktor quantitative. sapply() ialah fungsi wrapper dari lapply yang mengembalikan nilai vektor atau matrix. kita juga bisa langusng melihat dengan menggunakan summary() dan melihat nilai minimal serta maksimalnya
+```{r}
+sapply(auto[, 1:7], range)
+```
+
+# C
+```{r}
+sapply(auto[, 1:7], sd)
+```
+```{r}
+# bisa juga dilihat di summary
+sapply(auto[, 1:7], mean)
+```
+
+# D
+baris ke 10 sampai ke 85 dihilangkan
+```{r}
+new_auto = auto[-(10:85), ]
+dim(new_auto)
+```
+```{r}
+# cek apakah data sudah benar
+new_auto[9, ] == auto[9, ]
+new_auto[10, ] == auto[86, ]
+```
+
+kita menghitung range, mean, dan standard deviation dari dataframe yang baru
+```{r}
+sapply(new_auto[, 1:7], range)
+```
+```{r}
+sapply(new_auto[, 1:7], mean)
+```
+```{r}
+sapply(new_auto[, 1:7], sd)
+```
+
+```{r}
+pairs(auto)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

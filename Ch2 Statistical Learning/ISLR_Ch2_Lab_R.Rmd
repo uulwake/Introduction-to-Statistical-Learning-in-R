@@ -1,0 +1,206 @@
+---
+title: "R Notebook"
+output:
+  html_document:
+    df_print: paged
+---
+
+## Basic Commands
+```{r}
+x <- c(1, 3, 2, 5)
+x
+```
+Kita juga bisa menggunakan tanda '=' menggantikan assignment '<-'
+```{r}
+y = c(2, 3, 4, 5)
+y
+```
+Kita pun dapat menambahkan x dan y dan nilainya akan bertambah secara otomatis
+```{r}
+x + y
+length(x)
+length(y)
+```
+R juga memiliki fitur seperti ls() dan rm() yang masing masing bertujuan untuk melakukan list terhadap obejct apa saja yang sudah ada dan rm() berfungsi untuk menghapus object
+```{r}
+ls()
+```
+lalu kita menghapus objeck tersebut dengan rm()
+```{r}
+rm(x, y)
+ls()
+```
+jika kita mempunyai banyak objek, misalkan ada 5 objek maka kita dapat menggunakan perintah gabungan list() dan rm() untuk menghapus semuanya sekaligus.
+```{r}
+x <- 5
+y <- 10
+z <- c(1, 2, 3)
+ls()
+```
+kita hapus dengan perintah berikut
+```{r}
+rm(list=ls())
+ls()
+```
+sekarang kita akan memfokuskan pada penggunaan matrix.
+```{r}
+?matrix # perintah untuk membaca dokumen matrix
+x=matrix(data=c(1, 2, 3, 4), nrow=2, ncol=2)
+x
+```
+kita juga dapat memanggil perintah matrix dengan menghilangkan nrow dan ncol
+```{r}
+x=matrix(data=c(1, 2, 3, 4),2, 2)
+x
+```
+kita pun dapat menggunkan argumen byrow=TRUE agar matrix tersusun secara baris. Jika kita tidak menspesifikkan argumen byrow, maka secara default byrow bernilai FALSE
+```{r}
+x=matrix(data=c(1, 2, 3, 4), nrow=2, ncol=2, byrow=TRUE)
+x
+```
+silahkan dilihat perbedaannya. Terjadi perbedaan susunan. Sekarang kita akan mencoba untuk mengoperasikan fungsi sqrt() dan power of two ke matrix x.
+```{r}
+sqrt(x)
+x
+```
+```{r}
+x^2
+x
+```
+perhatikan perbedaanya. ketika kita mengoperasikan sqrt(x), tidak ada objek yang tercipta. Maka dari itu kita harus selalu menggassign nilai hasil operasi ke sesuatu tempat.
+
+r juga mempunya fungsi rnorm() untuk menghasilkan angka random dalam bentuk vektor. selain itu ada juga fungsi cor() untuk menghitung korelasi antar variabel.
+```{r}
+x=rnorm(100)
+x
+```
+```{r}
+?rnorm()
+y = x + rnorm(100, mean=100, sd=0.1)
+y
+```
+```{r}
+# hitung korelasi antara x dan y dengan fungsi cor()
+cor(x, y)
+```
+rnorm() membuat angka secara random. namun kita bisa menyamakan angka tersebut dengan mengatur nilai seed menggunakan fungsi set.seed()
+```{r}
+set.seed(1303)
+rnorm(50)
+```
+r juga memiliki fitur keren seperti menghitung mean, variance, dan standard deviation dengan menggunakan fungsi mean(), var(), dan sd()
+```{r}
+set.seed(3)
+y = rnorm(100)
+mean(y)
+var(y)
+sd(y)
+# sama saja dengan akar dari variansi
+sqrt(var(y))
+```
+## Graphics
+buku ini tidak menggunakan ggplot2 sebagai fungsi plot melainkan menggunakan plot built-in.
+```{r}
+?plot
+x = rnorm(100)
+y = rnorm(100)
+plot(x, y)
+```
+```{r}
+plot(x, y, xlab="ini adalah x-axis", ylab="ini adalah y-axis", main="ini adalah judul x dan y")
+```
+kita pun bisa menyimpan gambar yang kita ingin plot dengan fungsi berikut
+```{r}
+pdf("gambar.pdf")
+plot(x, y, col="green")
+dev.off()
+```
+fungsi seq() digunakan untuk menghasilkan sekeuns angka
+```{r}
+x = seq(1, 10)
+# bisa juga dengan x = 1:10
+x
+y = seq(1, 20, length=100) #100 angka dari 1-20 yang memiliki jarak yang sama
+y
+```
+## Indexing Data
+kita bisa menggunakann slicing seperti di python atau menggunakan concatenasi
+```{r}
+A = matrix(1:16, nrow=4, ncol=4)
+A
+```
+```{r}
+A[c(1, 3), c(2, 4)] #angka terakhir tidak diambil
+A[1:3, 3:4] # angka terakhir diambil
+```
+## Loading Data
+```{r}
+auto = read.table("../dataset/Auto.data")
+```
+```{r}
+# untuk melihat data seperti excel
+fix(auto)
+```
+karena dataset Auto.data memiliki missing values, maka kita harus bisa menanganinya. Selain itu kita harus memberikan argumen header=TRUE or header=T agar headernya tidak masuk ke dalam data
+```{r}
+auto = read.table("../dataset/Auto.data", header=T, na.strings="?")
+fix(auto)
+```
+kita juga bisa meng-load Auto.csv
+```{r}
+auto = read.csv("../dataset/Auto.csv", header=T, na.strings="?")
+fix(auto)
+dim(auto)
+```
+```{r}
+# mengecek nama nama variable
+names(auto)
+```
+## Tambahan
+```{r}
+attach(auto)
+plot(cylinders, mpg)
+```
+jika kita tidak menggunakan fungsi attach(), maka kita harus menggunakan argument plot(auto\$cylinders, auto\$mpg)
+
+kita juga dapat meruban nilai kualitatif menjadi kuantitatif
+```{r}
+cylinders = as.factor(cylinders)
+cylinders
+plot(cylinders, mpg)
+```
+histogram plot
+```{r}
+hist(mpg)
+```
+```{r}
+hist(mpg, col=2, breaks=15) #col=2 sama sja dengan col="red"
+```
+Pairs untuk scatterplot
+```{r}
+pairs(auto)
+```
+
+
+
+
+pairs untuk beberapa variabel saja
+```{r}
+pairs(~ mpg + displacement + horsepower + weight + acceleration, auto)
+```
+
+
+
+fungsi identify() untuk melihat hubungan beberapa variabel
+```{r}
+plot(horsepower, mpg)
+```
+```{r}
+plot(horsepower, mpg)
+identify(horsepower, mpg, name)
+```
+
+summary data
+```{r}
+summary(auto)
+```

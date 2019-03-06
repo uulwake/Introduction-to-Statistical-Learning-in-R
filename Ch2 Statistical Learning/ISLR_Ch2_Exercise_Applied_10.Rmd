@@ -1,0 +1,98 @@
+---
+title: "R Notebook"
+output:
+  html_document:
+    df_print: paged
+---
+
+# A
+load data
+```{r}
+library(MASS)
+```
+```{r}
+Boston
+```
+```{r}
+?Boston
+```
+```{r}
+dim(Boston)
+```
+
+# B
+buat pairwise scatterplot
+```{r}
+pairs(Boston)
+```
+
+# C
+cek korelasi capita crime rate dengan prediktor lain
+```{r}
+cor(Boston)
+```
+crim memiliki korelasi yang kuat dengan rad dan tax
+
+# D
+kita akan melihat plot histogram 3 prediktor menggunakan fungsi par(mfrow=c(1, 3))
+```{r}
+par(mfrow=c(1, 3))
+hist(Boston$crim[Boston$crim>1], breaks=25)
+hist(Boston$tax, breaks=25)
+hist(Boston$ptratio, breaks=25)
+```
+
+
+# E
+kita menggunakan fungsi subset untuk mencari row yang bernilai 1 di kolom chas
+```{r}
+dim(subset(Boston, chas==1))
+```
+ada 35 region
+
+# F
+```{r}
+summary(Boston$ptratio)
+```
+mediannya ialah 19.05. kita bisa juga menggunakan fungsi median
+```{r}
+median(Boston$ptratio)
+```
+
+# G
+
+```{r}
+lowest <- subset(Boston, medv == min(Boston$medv))
+lowest
+```
+```{r}
+summary(Boston$medv)
+```
+```{r}
+summary(Boston)
+```
+
+# H
+```{r}
+Boston$rm
+```
+
+```{r}
+dim(subset(Boston, rm > 7))
+```
+```{r}
+dim(subset(Boston, rm > 8))
+```
+ada 64 dan 13 berturut turut
+```{r}
+summary(subset(Boston, rm > 8))
+```
+
+silahkan di interpretasikan sendiri datanya
+
+
+
+
+
+
+

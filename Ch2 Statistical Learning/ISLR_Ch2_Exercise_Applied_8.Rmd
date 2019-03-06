@@ -1,0 +1,70 @@
+---
+title: "R Notebook"
+output:
+  html_document:
+    df_print: paged
+---
+pertama kita load data College.csv dengan fungsi read.csv()
+# A
+```{r}
+college = read.csv("../dataset/College.csv")
+```
+
+# B
+lihat data dengan fungsi fix()
+```{r}
+fix(college)
+```
+
+perbaiki data dengan menghilangkan kolom pertama
+```{r}
+rownames(college) = college[, 1] #ambil semua baris dan ambil kolom 1 saja
+fix(college)
+```
+```{r}
+# simpan semua data kecuali kolom satu ke objek college
+college = college[, -1] 
+fix(college)
+```
+sekarang data sudah rapi. private sudah menjadi kolom pertama. namun jika kita menggunakan fix(), maka akan terlihat ada kolom sebelum private. ini bukanlah kolom data melainkan nama yang dari R berikan ke tiap baris di college
+# C
+```{r}
+summary(college)
+```
+```{r}
+pairs(college)
+```
+pairs untuk 5 kolom pertama
+```{r}
+pairs(college[, 1:5])
+```
+```{r}
+# kita juga bisa menggunakan fungsi attach()
+plot(college$Private, college$Outstate) 
+```
+variabel elite merupakan variabel baru yang dibuat dengan parameter apakah proporsi siswa yang datang dari top 10% sekolahnya melewati batas 50% siswa
+```{r}
+fix(college)
+```
+kita menggunakna fungsi rep untuk mereplikasi nilai
+```{r}
+Elite = rep("No", nrow(college))
+Elite [college$Top10perc > 50] = "Yes"
+Elite = as.factor(Elite) # ubah data menjadi qualitative
+college = data.frame(college, Elite) # masukkan Elite ke college
+```
+```{r}
+summary(college$Elite)
+```
+```{r}
+plot(college$Elite, college$Outstate)
+```
+```{r}
+par(mfrow=c(2,2)) #menampilkan 4 grafik
+hist(college$Apps)
+hist(college$perc.alumni, col=2) # col = warna/color
+hist(college$S.F.Ratio, col=3, breaks=10)
+hist(college$Expend, breaks=100)
+```
+
+
