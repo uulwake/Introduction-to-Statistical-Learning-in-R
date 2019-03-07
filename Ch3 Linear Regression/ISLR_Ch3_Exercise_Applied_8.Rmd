@@ -1,0 +1,81 @@
+---
+title: "R Notebook"
+output:
+  html_document:
+    df_print: paged
+---
+
+# A
+load data dengan read.csv()
+```{r}
+auto = read.csv("../dataset/Auto.csv", header=T, na.strings="?")
+auto = na.omit(auto) # menghilangkan missing values
+```
+
+
+```{r}
+summary(auto)
+```
+ kita akan melihat hubungan antara mpg dan horsepower menggunakan fungsi lm.fit()
+```{r}
+attach(auto)
+lm.fit = lm(mpg ~ horsepower)
+summary(lm.fit)
+```
+
+## i
+ya hubungannya cukup signifikan dengan melihat p-value yagn sangat kecil dan F-stat yang cukup besar
+
+## ii
+hubungannya cukup kuat dengan nilai $R^2 = 60.59\%$
+
+## iii
+```{r}
+cor(mpg, horsepower)
+```
+hubungannya negatif. bisa juga dilihat dari koefisien horsepower yang bernilai negatif di model regresi
+
+## iV
+confidence interval
+```{r}
+predict(lm.fit, data.frame(horsepower=c(98)), interval="confidence")
+```
+prediction interval
+```{r}
+predict(lm.fit, data.frame(horsepower=c(98)), interval="prediction")
+```
+
+
+# B
+plot dengan menggunakan plot() dan abline()
+```{r}
+plot(horsepower, mpg)
+abline(lm.fit)
+```
+
+# C
+kita akan mengdiagnosa hasilnya dengan menunjukkan 4 plot dari lm.fit
+```{r}
+par(mfrow=c(2, 2))
+plot(lm.fit)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

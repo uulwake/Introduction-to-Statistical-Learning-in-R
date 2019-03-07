@@ -1,0 +1,78 @@
+---
+title: "R Notebook"
+output:
+  html_document:
+    df_print: paged
+---
+# A
+load data dari ISLR
+```{r}
+library(ISLR) # install.packages("ISLR") kalau belum ada
+summary(Carseats)
+```
+```{r}
+fix(Carseats)
+```
+```{r}
+dim(Carseats)
+```
+
+```{r}
+names(Carseats)
+```
+
+buat multiple regression untuk memprediksi sales menggunakan price, urban, dan US
+```{r}
+attach(Carseats)
+lm.fit = lm(Sales ~ Price + Urban + US)
+summary(lm.fit)
+```
+
+# B
+hanya UrbanYes yang tidak signifikan.
+
+price koefisienya negatif jadi ketika price naik maka sales turun. USYes koefisiennya positif, jadi ketika tokonya ada di US maka sales juga naik
+
+# C
+$Sales = 13.04 -0.05 \times Price -0.02 \times UrbanYes + 1.20 \times USYes$
+
+# D
+Price dan USYes
+
+# E
+Buat model baru tanpa Urban
+```{r}
+lm.fit2 = lm(Sales ~ Price + US)
+summary(lm.fit2)
+```
+
+# F
+nilai $R^2$nya mirip. Jadi tidak terlalu ada perbedaan
+
+# G
+cek confidence intervalnya
+```{r}
+confint(lm.fit2)
+```
+
+# H
+cek outliers dengan plot studentized residual dengan fitted values. jika ada nilai yang berada diluar -3 sampai 3, maka kemungkinan outliers
+```{r}
+plot(predict(lm.fit2), rstudent(lm.fit2))
+```
+
+karena masih ebrada di rentang, kemungkinan outliers belum ada.
+
+untuk mengecek high leverage point, kita bisa menggunakan diagnostic plot 
+```{r}
+par(mfrow=c(2,2))
+plot(lm.fit2)
+```
+
+
+ada titik yang kemungkinan memiliki leverage tinggi. dari halaman 98 jika nilai observasi tersebut melebihi $$ \frac{p + 1}{n} = 0.0076$$ maka titik tersebut adalah titik leverage. Dalam kasus ini ada beberapa titik yang melebihi batas tersebut, maka titik titik tersebut termasuk leverage point.
+
+
+
+
+

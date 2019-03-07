@@ -1,0 +1,54 @@
+---
+title: "R Notebook"
+output:
+  html_document:
+    df_print: paged
+---
+
+
+# A
+load boston data set
+```{r}
+library(MASS)
+summary(Boston)
+```
+
+silahkan dilakukan sendiri linear regresi antara crim dan prediktor yang lain.
+
+# B
+multiple linear regression menggunakans semua prediktor
+```{r}
+lm.fit = lm(crim ~ ., data=Boston)
+summary(lm.fit)
+```
+yang signifikan dengan response crim ialah zn, dis, rad, black, dan medv
+
+# C
+karena bagian tidak saya lakukan, silahkan anda lakukan sendiri dengan memplot hasil dari masing masing koefisien linear regresion di plot dengan hasil multiple regresion. kalian bisa menggunakan fungsi plot dan c() untuk menggabungkan nilai x. perhatikan bahwa koefisien terletak pada array index kedua di r (index di R dimulai dari 1 bukan 0)
+
+# D
+kita bisa menggunakan fungsi poly() untuk menciptakan polynomial derajat tertentu
+```{r}
+lm.fit = lm(crim ~ poly(indus, 3), data=Boston)
+summary(lm.fit)
+```
+
+
+silahkan mencobanya untuk prediktor yang lain
+```{r}
+names(Boston)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+

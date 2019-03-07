@@ -1,0 +1,87 @@
+---
+title: "R Notebook"
+output:
+  html_document:
+    df_print: paged
+---
+# A
+load data auto dan buat matrix scatterplot menggunakan pairs()
+```{r}
+auto = read.csv("../dataset/Auto.csv", header=T, na.strings="?")
+auto = na.omit(auto) # menghilangkan missing values
+pairs(auto)
+```
+
+
+# B
+hitung korelasi menggunakan cor(), karena 
+```{r}
+names(auto)
+```
+karena name bukan angka maka kita harus menghilangkannya dari perhitungan korelasi dengan menggunakan fungsi subset() dan tanda kurang
+```{r}
+cor(subset(auto, select=-name))
+```
+# C
+buat model multiple regression
+```{r}
+lm.fit_mr = lm(mpg ~ .-name, data=auto)
+# mr stands for multiple regression
+# dari lab kita tahu apa artinya .-name
+summary(lm.fit_mr)
+```
+## i
+ya ada hubugnan yang signifikan antara displacement, weight, year, dan origin dengan mpg
+
+## ii
+lihat yang memiliki bintang dari hasil summary
+
+## iii
+koefisien year bernilai 0.75 yang berarti terjadi penambahan 0.75 kali setiap tahunnya untuk mpg
+
+
+# D
+diagnostic plot
+```{r}
+par(mfrow=c(2,2))
+plot(lm.fit_mr)
+```
+
+plot residual memiliki pola, dan plot leverage memiliki data yang high leverage meskipun masih aman.
+```{r}
+plot(predict(lm.fit_mr), rstudent(lm.fit_mr))
+```
+batas nilai yang bagus untuk plot studentized residual adalah -3 sampai 3. karena ada data/observasi yang melewati batas tersebut sehingga bisa dikatakan ada kemungkinan outliers.
+
+# E
+buat interaction effect
+
+```{r}
+lm.fit_mr2 = lm(mpg ~ displacement*horsepower + weight*weight + cylinders*displacement*weight, data=auto)
+summary(lm.fit_mr2)
+```
+
+yang statistically significant bertanda bintang, semakin banyak bintangnya semakin signifikan.
+
+# F
+silahkan di coba sendiri. cukup tinggal mengganti interaction effectnya dan plot diagnosticnya.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

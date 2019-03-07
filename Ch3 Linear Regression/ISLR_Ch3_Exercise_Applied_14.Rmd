@@ -1,0 +1,107 @@
+---
+title: "R Notebook"
+output:
+  html_document:
+    df_print: paged
+---
+
+# A
+dari buku
+```{r}
+set.seed(1)
+x1 = runif(100)
+x2 = 0.5 * x1 + rnorm(100)/10
+y = 2 + 2*x1 + 0.3*x2 + rnorm(100)
+```
+
+# B
+```{r}
+cor(x1, x2)
+```
+```{r}
+plot(x1, x2)
+```
+
+# C
+```{r}
+lm.fit = lm(y ~ x1 + x2)
+summary(lm.fit)
+```
+silahkan diinterpretasikan sendiri. cukup lihat nilai p-valuenya
+
+# D
+```{r}
+lm.fit = lm(y ~ x1)
+summary(lm.fit)
+```
+interpretasikan sendiri. lihat p-value!
+
+# E
+```{r}
+lm.fit = lm(y ~ x2)
+summary(lm.fit)
+```
+lihat p-valuenya
+
+# F
+pada bagian c, x2 tidak memiliki hubungan signifikan dengan response. sementara ketika mengecek satu per satu hubunga x1 dan x2 dengan response, mereka ternyata masing masing memiliki hubungan signifikan dengan response. hal ini bisa terjadi karena x1 dan x2 memiliki korelasi yang sangat tinggi (lihat nilainya di bagian awal). fenomena ini disebut dengan collinearity (halaman 99)
+
+# G
+```{r}
+x1 = c(x1, 0.1)
+x2 = c(x2, 0.8)
+y = c(y, 6)
+lm.fit1 = lm(y ~ x1 + x2)
+summary(lm.fit1)
+```
+hanya x2 yang memiliki hubungan yang signifikan
+
+```{r}
+lm.fit2 = lm(y ~ x1)
+summary(lm.fit2)
+```
+x1 memiliki hubungan yang signifikan dengan response
+
+```{r}
+lm.fit3 = lm(y ~ x2)
+summary(lm.fit3)
+```
+x2 memiliki hubungan yang signifikan dengan response
+
+```{r}
+par(mfrow=c(2,2))
+plot(lm.fit1)
+```
+
+```{r}
+par(mfrow=c(2,2))
+plot(lm.fit2)
+```
+
+
+```{r}
+par(mfrow=c(2,2))
+plot(lm.fit3)
+```
+
+ada nilai yang memiliki leverage point yang tinggi seperti lm.fit1 dan lm.fit3
+
+```{r}
+plot(predict(lm.fit1), rstudent(lm.fit1))
+```
+
+tidak ada kemungkinan outliers
+
+
+```{r}
+plot(predict(lm.fit2), rstudent(lm.fit2))
+```
+ada kemungkinan outlier karena melewati batas nilai -3 dan 3
+
+```{r}
+plot(predict(lm.fit3), rstudent(lm.fit3))
+```
+
+
+
+

@@ -1,0 +1,77 @@
+---
+title: "R Notebook"
+output:
+  html_document:
+    df_print: paged
+---
+
+# A
+```{r}
+set.seed(1)
+x = rnorm(100)
+```
+
+# B
+buat suatu vector dengan mean 0 dan variasi 0.25
+```{r}
+eps = rnorm(100, 0, sqrt(0.25))
+```
+
+# C
+
+```{r}
+y = -1 + 0.5*x + eps
+```
+
+# D
+```{r}
+plot(x, y)
+```
+
+ada hubungan yang linear
+
+# E
+buat model regresinya
+```{r}
+lm.fit = lm(y ~ x)
+summary(lm.fit)
+```
+F-statistic nilainya nesar dan p-value nilainya kecil. ada hubungan signifikan antara predikto x dan response y
+
+# F
+kita akan menggambarkan population regresi dan model regresi. population regresi ialah regresi yang diambil dari persamaan garis dengan menghilangkan irreducible errornya
+```{r}
+plot(x, y)
+abline(lm.fit, lwd=5, col="red")
+abline(-1, 0.5, lwd=2, col="black")
+legend(-1.75, legend=c("model fit", "pop regression"), col=2:3, lwd=3)
+```
+
+# G
+```{r}
+lm.fit2 = lm(y ~ x + I(x^2))
+summary(lm.fit2)
+```
+
+lihat p-value, F-stat, dan $R^2$nya
+
+# H
+silahkan diulangi sendiri dengan mengganti nilai variansinya lebih kecil lagi untuk mendapatkan less noise. jika sudah, akan diperoleh hasil nilai $R^2$nya akan meningkat dan errornya akan semakin kecil
+
+# I
+silahkan dilakukan sendiri. hasilnya akan berkebalikan dari hasil bagian H
+
+# J
+selang kepercayaan untuk data set original menggunakan fungsi confint()
+```{r}
+confint(lm.fit)
+```
+
+untuk data set bagian H dan I bisa dilakukan sendiri. bagian H pasti kaan memiliki selang kepercayaan lebih pendek dari bagian I
+
+
+
+
+
+
+

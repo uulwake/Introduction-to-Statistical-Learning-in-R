@@ -1,0 +1,74 @@
+---
+title: "R Notebook"
+output:
+  html_document:
+    df_print: paged
+---
+# A
+buat prediktor dan responsenya dengan rnorm()
+```{r}
+set.seed(1)
+x = rnorm(100)
+y = 2*x + rnorm(100)
+```
+buat sebuah model linear regresi antara x dan y tanpa intercept
+```{r}
+lm.fit = lm(y ~ x + 0)
+summary(lm.fit)
+```
+nilai p-value tidak signifikan. kita gagal menolak null hipotesis
+
+
+# B
+lakukan linear regresi x onto y tanpa intercept
+```{r}
+lm.fit = lm(x ~ y + 0)
+summary(lm.fit)
+```
+p-value tidak signifikan
+
+# C
+gunakan persaman aljabar y onto x dan x onto y
+
+# D
+persaman beta diketahui. persamaan standard error beta juga diketahui. maka nilai t bisa diperoleh dengan membagi kedua nilai tersebut. silahkan dikerjakan sendiri.
+
+# E
+akan sama karena jika kita mengganti x dengan y dan y dengan x maka akan diperoleh persamaan yang sama
+
+# F
+```{r}
+lm.fit = lm(y ~ x)
+lm.fit2 = lm(x ~ y)
+```
+```{r}
+summary(lm.fit)
+```
+```{r}
+summary(lm.fit2)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
