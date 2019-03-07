@@ -1,0 +1,88 @@
+---
+title: "R Notebook"
+output:
+  html_document:
+    df_print: paged
+---
+
+# A
+buat fungsi
+```{r}
+Power = function() {
+    2^3
+}
+print(Power())
+
+```
+
+# B
+buat fungsi lain
+```{r}
+Power2 = function(x, a) {
+    x^a
+}
+Power2(3, 8)
+```
+
+# C
+hitung nilai menggunakan fungsi tersebut
+```{r}
+Power2(10, 3)
+Power2(8, 17)
+Power2(131, 3)
+```
+
+
+# D
+buat fungsi baru
+```{r}
+Power3 = function(x, a) {
+    res = x^a
+    return(res)
+}
+```
+
+# E
+plot fungsi tersebut
+```{r}
+x = 1:10
+plot(x, Power3(x, 2))
+```
+
+
+# F
+fungsi pangakt dan plot dalam satu kesatuan
+```{r}
+PlotPower = function(x, a) {
+    plot(x, Power3(x, a))
+}
+PlotPower(1:10, 3)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

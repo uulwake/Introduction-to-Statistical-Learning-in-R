@@ -1,0 +1,117 @@
+---
+title: "R Notebook"
+output:
+  html_document:
+    df_print: paged
+---
+
+# A
+
+```{r}
+library(ISLR)
+summary(Auto)
+attach(Auto)
+# buat kerangka prediktor baru
+mpg01 = rep(0, length(mpg))
+# buat nilainya
+mpg01[mpg > median(mpg)] = 1
+# gabugnkan dengan auti
+auto = data.frame(Auto, mpg01)
+```
+
+# B
+hitung korelasinya dengan cor(). exclude kolom ke-9 karena datanya kualitatif
+```{r}
+cor(auto[, -9])
+```
+data yang memiliki korelasi tinggi dengan mpg01 ialah cylinders, displacement, weight, dan displacement
+
+```{r}
+pairs(auto)
+```
+
+# C
+bagi data menjadi test dan training dataset.
+```{r}
+# bagi berdasarkan tahun
+# isinya boolean
+train = (year%%2 == 0)  
+# negasikan
+test = !train
+# buat dataset training
+auto.train = auto[train, ]
+# buat test dataset
+auto.test = auto[test, ]
+# buat label test 
+# digunakan untuk menghitung akurasi
+mpg01.test = mpg01[test]
+```
+
+
+# D
+dengan LDA
+```{r}
+library(MASS)
+lda.fit = lda(mpg01 ~ cylinders + weight + displacement + horsepower, data = auto, subset = train)
+lda.pred = predict(lda.fit, auto.test)
+# hitung akurasi
+# kode dari lab
+mean(lda.pred$class != mpg01.test)
+```
+
+# E
+dengan QDA (cara yang sama seperti LDA)
+```{r}
+qda.fit = qda(mpg01 ~ cylinders + weight + displacement + horsepower, data = auto, subset = train)
+qda.pred = predict(qda.fit, auto.test)
+mean(qda.pred$class != mpg01.test)
+```
+
+
+# F
+dengan Logistic Regression
+```{r}
+# dengan cara yang sama dari lab
+glm.fit = glm(mpg01 ~ cylinders + weight + displacement + horsepower, data = auto, family = binomial, subset = train)
+glm.probs = predict(glm.fit, auto.test, type = "response")
+# buat struktur hasil test set
+glm.pred = rep(0, length(glm.probs))
+# buat hasil test set
+glm.pred[glm.probs > 0.5] = 1
+# hitung rata rata akurasi
+mean(glm.pred != mpg01.test)
+```
+
+# G
+dengan cara yang sama dengan Lab Exercise chapter 4.
+
+K = 1
+```{r}
+library(class)
+# satukan prediktor menjadi satu matrix/table
+train.X = cbind(cylinders, weight, displacement, horsepower)[train, ]
+test.X = cbind(cylinders, weight, displacement, horsepower)[test, ]
+train.mpg01 = mpg01[train]
+set.seed(1)
+knn.pred = knn(train.X, test.X, train.mpg01, k = 1)
+mean(knn.pred != mpg01.test)
+```
+
+K = 10
+```{r}
+knn.pred = knn(train.X, test.X, train.mpg01, k = 10)
+mean(knn.pred != mpg01.test)
+```
+
+K = 100
+```{r}
+knn.pred = knn(train.X, test.X, train.mpg01, k = 100)
+mean(knn.pred != mpg01.test)
+```
+
+
+
+
+
+
+

@@ -1,0 +1,138 @@
+---
+title: "R Notebook"
+output:
+  html_document:
+    df_print: paged
+---
+
+# A
+```{r}
+library(ISLR)
+summary(Weekly)
+```
+```{r}
+names(Weekly)
+```
+
+```{r}
+fix(Weekly)
+```
+```{r}
+# remove Direction
+cor(Weekly[, -9])
+```
+```{r}
+pairs(Weekly)
+```
+
+
+# B
+
+```{r}
+attach(Weekly)
+glm.fit = glm(Direction ~ Lag1 + Lag2 + Lag3 + Lag4 + Lag5 + Volume, data = Weekly, family = binomial)
+summary(glm.fit)
+```
+
+lag2 signifikan
+
+# C
+hitung confusion matrixnya
+```{r}
+# buat rangka untuk test error
+glm.probs = predict(glm.fit, type="response")
+# assign semua menjadi down dengan panjang dari glm.probs
+glm.pred = rep("Down", length(glm.probs))
+# yang peluangnya lebih besar dari 0.5 kita assign menjadi up
+glm.pred[glm.probs > 0.5] = "Up"
+# bandingkan hasil dari glm.pred dengan Direction(labelnya)
+table(glm.pred, Direction)
+```
+
+silahkan dihitung sendiri. sudah cukup mudah untuk dihitung
+
+# D
+bagi data menjadi dua bagian yaitu 1990-2008 untuk training dan 2009-2010 untuk test
+```{r}
+# buat boolean dengan row yang sama dengan Year
+train = (Year < 2009)
+# buat test set
+# ambil semua row yang TRUE dan ambil semua kolom
+Weekly.0910 = Weekly[!train, ]
+# fit model
+# gunakan subset train sehingga yang diambil hanya yang true saja
+glm.fit = glm(Direction ~ Lag2, data = Weekly, family = binomial, subset = train)
+# dengan cara yang sama seperti sebelumnya, buat confusion amtrixnya
+glm.probs = predict(glm.fit, Weekly.0910, type = "response")
+glm.pred = rep("Down", length(glm.probs))
+glm.pred[glm.probs > 0.5] = "Up"
+# buat label unutk test
+Direction.0910 = Direction[!train]
+# confusion matrix
+table(glm.pred, Direction.0910)
+```
+
+# E
+ulangi langakh di atas menggunakan LDA
+```{r}
+library(MASS)
+lda.fit = lda(Direction ~ Lag2, data = Weekly, subset = train)
+lda.pred = predict(lda.fit, Weekly.0910)
+table(lda.pred$class, Direction.0910)
+```
+
+
+
+# F
+ulangi klasifikasi menggunakan QDA
+```{r}
+qda.fit = qda(Direction ~ Lag2, data = Weekly, subset = train)
+# ambil bagian classnya (lihat Lab untuk elbih jelas)
+qda.class = predict(qda.fit, Weekly.0910)$class
+table(qda.class, Direction.0910)
+```
+
+# G
+ulangi dengan menggunakan KNN
+```{r}
+library(class)
+train.X = as.matrix(Lag2[train]) # train set
+test.X = as.matrix(Lag2[!train]) # test set
+train.Direction = Direction[train] # label training
+set.seed(1)
+knn.pred = knn(train.X, test.X, train.Direction, k = 1)
+table(knn.pred, Direction.0910)
+```
+
+# H
+LDA dan Logistic Regression
+
+# I
+silahkan dilakukan sendiri. Caranya sama dengan lab. hanya mengganti prediktornya saja
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
