@@ -1,0 +1,98 @@
+---
+title: "R Notebook"
+output:
+  html_document:
+    df_print: paged
+---
+
+# A
+buat model logistic regressionnya
+```{r}
+library(ISLR)
+summary(Weekly)
+names(Weekly)
+```
+
+```{r}
+set.seed(1)
+# jangan lupa detach
+attach(Weekly)
+```
+
+```{r}
+glm.fit = glm(Direction ~ Lag1 + Lag2, data = Weekly, family = binomial)
+summary(glm.fit)
+```
+
+
+
+# B
+buat model logistic regression tanpa observasi pertama
+```{r}
+# Weekly[-1, ] menghilangkan baris/observasi pertama
+glm.fit = glm(Direction ~ Lag1 + Lag2, data = Weekly[-1, ], family = binomial)
+summary(glm.fit)
+```
+
+
+# C
+prediksi observasi pertama dari model bagian (b)
+```{r}
+predict.glm(glm.fit, Weekly[1, ], type = "response") > 0.5
+```
+
+# D
+ulangi langkah bagian (b) dan (c) dengan mengganti observasi ke i (konsep LOOCV)
+```{r}
+# buat kerangka dengan jumlah dimensi yang sama (barisnya sama)
+count = rep(0, dim(Weekly)[1])
+# gunakan fungsi for(
+# iterasi dari observasi ke 1 sampai observasi ke 1089 (dimens pertama Weekly/baris)
+
+for (i in 1:(dim(Weekly)[1])) {
+  # train model tanpa observasi ke-i
+  glm.fit = glm(Direction ~ Lag1 + Lag2, data = Weekly[-i, ], family = binomial)
+  # test model dengan observasi ke-i
+  test_result = predict.glm(glm.fit, Weekly[i, ], type = "response") > 0.5
+  test_label= Weekly[i, ]$Direction == "Up"
+  if (test_result != test_label) 
+      count[i] = 1
+}
+
+sum(count)
+```
+
+```{r}
+mean(count)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

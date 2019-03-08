@@ -1,0 +1,91 @@
+---
+title: "R Notebook"
+output:
+  html_document:
+    df_print: paged
+---
+
+# A
+buat logistic regression menggunakan incomen dan balance untuk memprediksi default
+```{r}
+library(ISLR)
+summary(Default)
+attach(Default)
+```
+```{r}
+set.seed(1)
+glm.fit = glm(default ~ income + balance, data = Default, family = binomial)
+```
+
+# B
+gunakan pendekatan validation set
+```{r}
+val_approach = function() {
+  # i.
+  # sampling 500 data dari 1000 data
+  train = sample(dim(Default)[1], dim(Default)[1]/2)
+  # ii.
+  # train data menggunakan data train
+  # gunakan klasifikasi
+  glm.fit = glm(default ~ income + balance, data = Default, family = binomial, subset = train)
+  # iii.
+  # buat kerangka glm.pred dan inisialisasi dengan no
+  glm.pred = rep("No", dim(Default)[1]/2)
+  # test model dengan data test (selain training data)
+  glm.probs = predict(glm.fit, Default[-train, ], type = "response")
+  # dari objek glm.pred yang sudah di buat
+  # jika nilai glm.probs lebih besar dari 0.5, assign nilainya menjadi yes
+  glm.pred[glm.probs > 0.5] = "Yes"
+  # iv.
+  # kembalikan nilai akurasinya dengan membandingkan hasil test dan label test
+  # lalu menghitung rata ratanya
+  return(mean(glm.pred != Default[-train, ]$default))
+}
+val_approach()
+```
+
+
+# C
+ulangi proses di atas sebanyak 3x
+```{r}
+val_approach()
+val_approach()
+val_approach()
+```
+
+
+# D
+sekarang prediksi default dengan predikto income, balance, dan dummy variable student
+```{r}
+# buat training data set
+# ambil 500 data dari 1000 data
+train = sample(dim(Default)[1], dim(Default)[1]/2)
+# train dengan logistic regression
+# gunakan 3 prediktor
+# train menggunakan subset train (training data)
+glm.fit = glm(default ~ income + balance + student, data = Default, family = binomial, subset = train)
+# buat kerangka test result
+# set semuanya menjadi no
+glm.pred = rep("No", dim(Default)[1]/2)
+# predict test set dengan model yang sudah dilatih
+# gunakan data test set (selain training data)
+glm.probs = predict(glm.fit, Default[-train, ], type = "response")
+# jika nilainya lebih besar dari 0.5
+# ganti valuenya menjadi yes
+glm.pred[glm.probs > 0.5] = "Yes"
+# hitung akurasi dengan membandingkan rata-rata antara test result dan test label
+mean(glm.pred != Default[-train, ]$default)
+```
+
+dari hasil di atas, tidak ada perbedaan yang signifikan dalam akurasi tes dengan menambahakan prediktor
+
+
+
+
+
+
+
+
+
+
+

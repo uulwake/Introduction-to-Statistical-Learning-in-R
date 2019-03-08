@@ -1,0 +1,89 @@
+---
+title: "R Notebook"
+output:
+  html_document:
+    df_print: paged
+---
+
+# A
+```{r}
+library(MASS)
+summary(Boston)
+```
+
+```{r}
+set.seed(1)
+attach(Boston)
+medv.mean = mean(medv)
+medv.mean
+```
+
+
+
+# B
+```{r}
+medv.err = sd(medv)/sqrt(length(medv))
+medv.err
+```
+
+
+# C
+```{r}
+boot.fn = function(data, index)
+  return(mean(data[index]))
+
+library(boot)
+bstrap = boot(medv, boot.fn, 1000)
+bstrap
+```
+
+
+
+# D
+```{r}
+t.test(medv)
+```
+
+
+```{r}
+c(bstrap$t0 - 2 * 0.4119, bstrap$t0 + 2 * 0.4119)
+```
+
+
+
+# E
+
+```{r}
+medv.med = median(medv)
+medv.med
+```
+
+
+# F
+```{r}
+boot.fn = function(data, index) 
+  return(median(data[index]))
+boot(medv, boot.fn, 1000)
+```
+
+
+# G
+```{r}
+medv.tenth = quantile(medv, c(0.1))
+medv.tenth
+```
+
+# H
+
+```{r}
+boot.fn = function(data, index) 
+  return(quantile(data[index], c(0.1)))
+boot(medv, boot.fn, 1000)
+```
+
+
+
+
+
+
+

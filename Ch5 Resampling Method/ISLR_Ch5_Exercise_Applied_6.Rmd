@@ -1,0 +1,65 @@
+---
+title: "R Notebook"
+output:
+  html_document:
+    df_print: paged
+---
+
+# A
+```{r}
+library(ISLR)
+summary(Default)
+names(Default)
+```
+```{r}
+# jangan lupa untuk selalu meng-detach packages/library
+attach(Default)
+```
+
+```{r}
+set.seed(1)
+glm.fit = glm(default ~ income + balance, data = Default, family = binomial)
+summary(glm.fit)
+```
+
+# B
+buat fungsi boot.fn()
+```{r}
+# jika fungsi hanya memiliki satu statement
+# kita bisa tidak menggunakan {}
+# argument/parameter input fungsi adalah data dan index
+# fungsi akan mengembalikan koefisien dari hasil training 
+boot.fn = function(data, index) 
+  return(coef(glm(default ~ income + balance, data = data, family = binomial, subset = index)))
+```
+
+
+
+# C
+menggunakan boot() bersama dengan boot.fn() yang telah dibuat
+```{r}
+library(boot)
+# dataframe = Default
+# statistic = boot.fn()
+# R = 50
+boot(Default, boot.fn, 1000)
+```
+
+
+# D
+standard error dari glm() untuk (4.348e-01, 4.985e-06 ,2.274e-04)
+sementara itu SE dari bootstrap (4.239273e-01, 4.582525e-06, 2.267955e-04)
+
+tidak terlalu jauh perbedaannya.
+
+
+
+
+
+
+
+
+
+
+
+
